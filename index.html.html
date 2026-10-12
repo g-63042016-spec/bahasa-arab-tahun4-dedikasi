@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kuiz Bahasa Arab Tahun 4 - SK Parit Sapran</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts for Arabic & Malay -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- JS-Confetti for reward animations -->
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', 'Fredoka', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .font-arabic {
+      font-family: 'Amiri', serif;
+      direction: rtl;
+    }
+    .custom-card {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      border: 3px solid #60a5fa;
+    }
+    .btn-action {
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 0px 0px rgba(0, 0, 0, 0.15);
+    }
+    .btn-action:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0px 0px rgba(0, 0, 0, 0.15);
+    }
+    .option-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .option-btn:hover {
+      transform: scale(1.02);
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .timer-danger {
+      animation: pulse-ring 1.2s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-10">
+
+  <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-4 px-4 shadow-lg sticky top-0 z-40">
+    <div class="max-w-3xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3 space-x-reverse md:space-x-3">
+        <div class="bg-white p-2 rounded-2xl text-blue-600 text-2xl shadow-md">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight md:text-xl">SK PARIT SAPRAN</h1>
+          <p class="text-xs text-blue-100">Bahasa Arab Tahun 4 (Dedikasi) • Cikgu Azizi</p>
+        </div>
+      </div>
+      
+      <button onclick="openSettingsModal()" class="bg-white/20 hover:bg-white/30 p-2.5 rounded-xl text-white backdrop-blur-sm transition">
+        <i class="fa-solid fa-gear text-lg"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-3xl mx-auto p-4 md:p-6">
+
+    <section id="screen-welcome" class="block">
+      <div class="bg-white rounded-3xl p-6 md:p-8 custom-card text-center relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-100 rounded-full blur-2xl"></div>
+        <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-emerald-100 rounded-full blur-2xl"></div>
+
+        <div class="inline-block p-4 bg-blue-50 text-blue-600 rounded-3xl mb-4 text-4xl shadow-inner border border-blue-100">
+          <i class="fa-solid fa-book-quran"></i>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-blue-900 mb-2">Selamat Datang!</h2>
+        <p class="text-slate-600 text-sm md:text-base mb-6">Sila masukkan nama anda untuk memulakan latihan Bahasa Arab Tahun 4.</p>
+
+        <form onsubmit="saveStudentInfo(event)" class="space-y-4 max-w-md mx-auto">
+          <div>
+            <label class="block text-left text-sm font-semibold text-slate-700 mb-1">Nama Full Murid:</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                <i class="fa-solid fa-user"></i>
+              </span>
+              <input type="text" id="input-student-name" required placeholder="Contoh: Muhammad Ali bin Ahmad" class="w-full pl-10 pr-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-blue-500 focus:outline-none transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-left text-sm font-semibold text-slate-700 mb-1">Kelas:</label>
+            <input type="text" id="input-student-class" value="TAHUN 4 DEDIKASI" readonly class="w-full px-4 py-3 bg-slate-100 text-slate-600 rounded-2xl border-2 border-slate-200 font-semibold cursor-not-allowed">
+          </div>
+
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-2xl btn-action flex items-center justify-center space-x-2 text-lg">
+            <span>Teruskan Ke Tajuk</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <section id="screen-topics" class="hidden">
+      <div class="bg-blue-600 text-white rounded-2xl p-4 mb-6 flex justify-between items-center shadow-md">
+        <div>
+          <span class="text-xs uppercase tracking-wider text-blue-200 block">Nama Murid:</span>
+          <span id="display-student-name" class="font-bold text-lg"></span>
+        </div>
+        <button onclick="changeStudentName()" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg border border-white/30 transition">
+          <i class="fa-solid fa-pen mr-1"></i>Tukar
+        </button>
+      </div>
+
+      <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+        <i class="fa-solid fa-list-check text-blue-600 mr-2"></i>Pilih Tajuk Pembelajaran (10 Soalan / Tajuk)
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="topics-grid">
+        <!-- Topic cards dynamically loaded -->
+      </div>
+    </section>
+
+    <section id="screen-quiz" class="hidden">
+      <!-- Quiz Header Controls -->
+      <div class="bg-white rounded-2xl p-4 mb-4 custom-card flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <span id="quiz-topic-title" class="font-bold text-blue-900 block text-base md:text-lg"></span>
+          <span id="quiz-progress-text" class="text-xs font-bold text-slate-500">Soalan 1 daripada 10</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <!-- Timer -->
+          <div id="timer-box" class="flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-xl text-sm font-bold">
+            <i class="fa-solid fa-clock mr-1.5 text-amber-600"></i>
+            <span id="timer-text">60s</span>
+          </div>
+          <!-- Score Badge -->
+          <div class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-sm font-bold">
+            <i class="fa-solid fa-star mr-1.5 text-amber-500"></i>
+            <span id="score-text">0/100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="bg-white rounded-3xl p-6 md:p-8 custom-card mb-4 text-center">
+        <div id="question-number-badge" class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full mb-3">
+          SOALAN #1
+        </div>
+        <h3 id="question-text-ar" class="font-arabic text-3xl md:text-4xl text-slate-900 font-bold mb-4 leading-relaxed"></h3>
+        <p id="question-text-ms" class="text-slate-600 text-sm md:text-base font-medium mb-6"></p>
+
+        <!-- Options Container -->
+        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <!-- Options rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Footer Buttons inside Quiz -->
+      <div class="flex justify-between items-center">
+        <button onclick="confirmExitQuiz()" class="text-slate-500 hover:text-red-600 text-sm font-semibold flex items-center px-3 py-2 rounded-xl transition">
+          <i class="fa-solid fa-door-open mr-1.5"></i>Keluar Kuiz
+        </button>
+      </div>
+    </section>
+
+    <section id="screen-result" class="hidden">
+      <div class="bg-white rounded-3xl p-6 md:p-8 custom-card text-center relative overflow-hidden">
+        <div id="result-badge-icon" class="w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 bg-emerald-100 text-emerald-600 shadow-inner">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+
+        <h2 id="result-status-title" class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-1">Tahniah! Anda Berjaya!</h2>
+        <p id="result-topic-name" class="text-slate-500 text-sm mb-6"></p>
+
+        <!-- Score Big Card -->
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-3xl p-6 mb-6 max-w-sm mx-auto">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1">Markah Keseluruhan</span>
+          <div id="final-score-val" class="text-5xl font-black text-blue-600 mb-1">100</div>
+          <p id="final-percentage-val" class="text-sm font-bold text-slate-600 mb-2">Peratusan: 100%</p>
+          <div id="grade-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-white uppercase tracking-wider">
+            GRED A+ (CEMERLANG)
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3 max-w-md mx-auto">
+          <button onclick="generateAndShowCertificate()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl btn-action flex items-center justify-center space-x-2 text-base">
+            <i class="fa-solid fa-certificate text-xl"></i>
+            <span>Jana & Muat Turun Sijil Digital HD</span>
+          </button>
+
+          <button onclick="backToTopics()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-2xl btn-action flex items-center justify-center space-x-2 text-base">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Pilih Tajuk Lain</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="modal-cert" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-card text-center relative">
+      <button onclick="closeCertModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 text-xl p-2">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 class="text-xl font-bold text-slate-800 mb-3"><i class="fa-solid fa-award text-amber-500 mr-2"></i>Sijil Pencapaian Digital</h3>
+      <p class="text-xs text-slate-500 mb-4">Sijil bersaiz HD bersedia untuk disimpan & dicetak.</p>
+
+      <!-- Canvas Render Area -->
+      <div class="overflow-x-auto mb-4 border rounded-2xl shadow-inner bg-slate-100 p-2 flex justify-center">
+        <canvas id="cert-canvas" width="1200" height="850" class="max-w-full h-auto rounded-xl shadow-md"></canvas>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="downloadCanvasCertificate()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-2xl btn-action flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-download"></i>
+          <span>Muat Turun Gambar (PNG)</span>
+        </button>
+        <button onclick="closeCertModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-6 rounded-2xl">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-settings" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full custom-card">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-sliders text-blue-600 mr-2"></i>Tetapan Cikgu / Admin</h3>
+        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Google Sheets Webhook App URL:</label>
+          <input type="text" id="input-webhook-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-3 text-xs rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500">
+          <p class="text-[11px] text-slate-500 mt-1">Hantar keputusan murid terus ke Google Sheets Cikgu Azizi secara automatik.</p>
+        </div>
+
+        <div class="pt-2 flex justify-end space-x-2">
+          <button onclick="saveSettings()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl btn-action">
+            Simpan Tetapan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ------------------------------------------------------------------
+    // BANK SOALAN BAHASA ARAB TAHUN 4 - SK PARIT SAPRAN (10 SOALAN / TAJUK)
+    // ------------------------------------------------------------------
+    const QUESTION_BANK = {
+      1: {
+        title: "الشهور الميلادية (Bulan-bulan Masihi)",
+        desc: "Latihan 10 Soalan Mengenal Nama-nama Bulan Masihi dalam Bahasa Arab.",
+        icon: "fa-calendar-days",
+        color: "from-blue-500 to-cyan-500",
+        questions: [
+          { ar: "ما هُوَ الشَّهْرُ الأَوَّلُ فِي السَّنَةِ؟", ms: "Apakah bulan pertama dalam setahun?", options: ["يَنَايِر", "فِبْرَايِر", "مَارِس", "أَبْرِيل"], answer: 0 },
+          { ar: "الشَّهْرُ الثَّانِي هُوَ ...", ms: "Bulan kedua ialah ...", options: ["مَايُو", "فِبْرَايِر", "يُونِيُو", "أَغُسْطُس"], answer: 1 },
+          { ar: "شَهْرُ «مَارِس» هُوَ الشَّهْرُ ...", ms: "Bulan 'Mac' ialah bulan yang ke-...", options: ["الثَّالِث", "الرَّابِع", "الْخَامِس", "السَّادِس"], answer: 0 },
+          { ar: "أَيُّ شَهْرٍ يَأْتِي بَعْدَ أَبْرِيل؟", ms: "Apakah bulan yang datang selepas April?", options: ["مَايُو", "يُولِيُو", "سِبْتَمْبَر", "أُكْتُوبَر"], answer: 0 },
+          { ar: "الشَّهْرُ السَّادِسُ هُوَ ...", ms: "Bulan keenam ialah ...", options: ["يُونِيُو", "يُولِيُو", "أَغُسْطُس", "نُوفَمْبَر"], answer: 0 },
+          { ar: "«أَغُسْطُس» هُوَ الشَّهْرُ ...", ms: "'Ogos' ialah bulan yang ke-...", options: ["الثَّامِن", "التَّاسِع", "العَاشِر", "السَّابِع"], answer: 0 },
+          { ar: "الشَّهْرُ التَّاسِعُ هُوَ ...", ms: "Bulan kesembilan ialah ...", options: ["سِبْتَمْبَر", "أُكْتُوبَر", "نُوفَمْبَر", "دِيسَمْبَر"], answer: 0 },
+          { ar: "مَا هُوَ الشَّهْرُ العَاشِرُ؟", ms: "Apakah bulan yang kesepuluh?", options: ["أُكْتُوبَر", "سِبْتَمْبَر", "نُوفَمْبَر", "فِبْرَايِر"], answer: 0 },
+          { ar: "الشَّهْرُ الحَادِيَ عَشَرَ هُوَ ...", ms: "Bulan kesebelas ialah ...", options: ["نُوفَمْبَر", "دِيسَمْبَر", "يَنَايِر", "مَارِس"], answer: 0 },
+          { ar: "الشَّهْرُ الأَخِيرُ فِي السَّنَةِ هُوَ ...", ms: "Bulan terakhir dalam setahun ialah ...", options: ["دِيسَمْبَر", "نُوفَمْبَر", "أُكْتُوبَر", "أَغُسْطُس"], answer: 0 }
+        ]
+      },
+      2: {
+        title: "مَنْ فِي المَدْرَسَة؟ (Warga Sekolah)",
+        desc: "Latihan 10 Soalan Mengenal Ahli & Warga Sekolah.",
+        icon: "fa-users",
+        color: "from-emerald-500 to-teal-500",
+        questions: [
+          { ar: "مَنْ هَذَا؟ هَذَا ... (Guru Lelaki)", ms: "Siapakah ini? Ini ...", options: ["مُعَلِّمٌ", "مُعَلِّمَةٌ", "تِلْمِيذٌ", "تِلْمِيذَةٌ"], answer: 0 },
+          { ar: "مَنْ هَذِهِ؟ هَذِهِ ... (Guru Perempuan)", ms: "Siapakah ini? Ini ...", options: ["مُعَلِّمَةٌ", "مُعَلِّمٌ", "حَارِسٌ", "مُدِيرٌ"], answer: 0 },
+          { ar: "«تِلْمِيذٌ» بِمَعْنَى ...", ms: "'تِلْمِيذٌ' bermaksud ...", options: ["Murid Lelaki", "Murid Perempuan", "Guru Lelaki", "Pengawal Keselamatan"], answer: 0 },
+          { ar: "«مُدِيرَةٌ» هِيَ ...", ms: "'مُدِيرَةٌ' ialah ...", options: ["Pengetua / Guru Besar Perempuan", "Guru Besar Lelaki", "Murid Perempuan", "Pustakawan"], answer: 0 },
+          { ar: "مَنْ يَحْرُسُ المَدْرَسَةَ؟", ms: "Siapakah yang mengawal keselamatan sekolah?", options: ["حَارِسٌ", "مُعَلِّمٌ", "تِلْمِيذٌ", "كَاتِبٌ"], answer: 0 },
+          { ar: "الَّذِي يَعْمَلُ فِي المَكْتَبِ هُوَ ... (Kerani Lelaki)", ms: "Orang yang bekerja di pejabat ialah ...", options: ["كَاتِبٌ", "كَاتِبَةٌ", "حَارِسٌ", "مُدِيرٌ"], answer: 0 },
+          { ar: "مَنْ يَبِيعُ الطَّعَامَ فِي المَطْعَمِ؟ (Peniaga Perempuan)", ms: "Siapakah yang menjual makanan di kantin?", options: ["بَائِعَةٌ", "بَائِعٌ", "مُعَلِّمَةٌ", "تِلْمِيذَةٌ"], answer: 0 },
+          { ar: "هَذَا ... (Murid Lelaki yang rajin)", ms: "Ini ...", options: ["تِلْمِيذٌ نَشِيطٌ", "تِلْمِيذَةٌ نَشِيطَةٌ", "مُعَلِّمَةٌ", "حَارِسٌ"], answer: 0 },
+          { ar: "هَذِهِ ... (Pustakawan Perempuan)", ms: "Ini ...", options: ["أَمِينَةُ المَكْتَبَةِ", "أَمِينُ المَكْتَبَةِ", "مُدِيرٌ", "كَاتِبٌ"], answer: 0 },
+          { ar: "مَنْ يَنْصَحُ الطُّلاَّبَ؟ (Guru Bimbingan/Kaunselor)", ms: "Siapakah yang memberi nasihat kepada murid?", options: ["المُرْشِدُ العَمَلِيُّ", "الحَارِسُ", "البَائِعُ", "التِّلْمِيذُ"], answer: 0 }
+        ]
+      },
+      3: {
+        title: "أُحِبُّ مَدْرَسَتِي (Tempat-tempat di Sekolah)",
+        desc: "Latihan 10 Soalan Tempat & Fasiliti Sekolah.",
+        icon: "fa-school",
+        color: "from-amber-500 to-orange-500",
+        questions: [
+          { ar: "أَيْنَ نَدْرُسُ؟ نَدْرُسُ فِي ...", ms: "Di manakah kita belajar? Kita belajar di ...", options: ["الفَصْلِ", "المَلْعَبِ", "المَطْعَمِ", "الحَمَّامِ"], answer: 0 },
+          { ar: "نَقْرَأُ الكُتُبَ فِي ...", ms: "Kita membaca buku-buku di ...", options: ["المَكْتَبَةِ", "المَلْعَبِ", "المَقْصَفِ", "القَاعَةِ"], answer: 0 },
+          { ar: "نَلْعَبُ كُرَةَ القَدَمِ فِي ...", ms: "Kita bermain bola sepak di ...", options: ["المَلْعَبِ", "الفَصْلِ", "المَكْتَبَةِ", "المَكْتَبِ"], answer: 0 },
+          { ar: "نَشْتَرِي الطَّعَامَ فِي ...", ms: "Kita membeli makanan di ...", options: ["المَقْصَفِ / المَطْعَمِ", "الفَصْلِ", "المَكْتَبَةِ", "المُصَلَّى"], answer: 0 },
+          { ar: "نُصَلِّي الظُّهْرَ فِي ...", ms: "Kita solat Zohor di ...", options: ["المُصَلَّى", "المَلْعَبِ", "المَكْتَبَةِ", "الفَصْلِ"], answer: 0 },
+          { ar: "مَا مَعْنَى «القَاعَةُ»؟", ms: "Apakah maksud 'القَاعَةُ'?", options: ["Dewan", "Padang", "Kantin", "Bilik Guru"], answer: 0 },
+          { ar: "مَا مَعْنَى «غُرْفَةُ المُعَلِّمِينَ»؟", ms: "Apakah maksud 'غُرْفَةُ المُعَلِّمِينَ'?", options: ["Bilik Guru", "Bilik Sains", "Bilik Pengetua", "Pejabat"], answer: 0 },
+          { ar: "أَيْنَ المَكْتَبُ الإِدَارِيُّ؟ (Pejabat Pentadbiran)", ms: "Di manakah pejabat pentadbiran?", options: ["الإِدَارَةُ", "المَلْعَبُ", "المَكْتَبَةُ", "الحَمَّامُ"], answer: 0 },
+          { ar: "نَغْسِلُ الأَيْدِيَ فِي ...", ms: "Kita mencuci tangan di ...", options: ["الحَمَّامِ / المَغْسَلَةِ", "الفَصْلِ", "المَكْتَبَةِ", "القَاعَةِ"], answer: 0 },
+          { ar: "نَعْمَلُ التَّجَارِبَ فِي ... (Makmal Sains)", ms: "Kita membuat eksperimen di ...", options: ["مَعْمَلِ العُلُومِ", "المَقْصَفِ", "المَلْعَبِ", "المُصَلَّى"], answer: 0 }
+        ]
+      },
+      4: {
+        title: "بَيْتِي جَنَّتِي (Ruang & Peralatan di Rumah)",
+        desc: "Latihan 10 Soalan Ruang & Perabot Rumah.",
+        icon: "fa-house-chimney",
+        color: "from-purple-500 to-pink-500",
+        questions: [
+          { ar: "أَيْنَ نَنَامُ؟ نَنَامُ فِي ...", ms: "Di manakah kita tidur? Kita tidur di ...", options: ["غُرْفَةِ النَّوْمِ", "المَطْبَخِ", "الحَمَّامِ", "الرَّفِّ"], answer: 0 },
+          { ar: "تَطْبُخُ الأُمُّ فِي ...", ms: "Ibu memasak di ...", options: ["المَطْبَخِ", "الصَّالَةِ", "غُرْفَةِ الجُلُوسِ", "الحَدِيقَةِ"], answer: 0 },
+          { ar: "نَسْتَقْبِلُ الضُّيُوفَ فِي ...", ms: "Kita menerima tetamu di ...", options: ["غُرْفَةِ الضُّيُوفِ / الجُلُوسِ", "المَطْبَخِ", "الحَمَّامِ", "غُرْفَةِ النَّوْمِ"], answer: 0 },
+          { ar: "مَا مَعْنَى «سَرِيرٌ»؟", ms: "Apakah maksud 'سَرِيرٌ'?", options: ["Katil", "Kerusi", "Meja", "Almari"], answer: 0 },
+          { ar: "نَجْلِسُ عَلَى ...", ms: "Kita duduk di atas ...", options: ["الكُرْسِيِّ", "المَكْتَبِ", "السَّرِيرِ", "التِّلْفَازِ"], answer: 0 },
+          { ar: "نَضَعُ المَلابِسَ فِي ...", ms: "Kita meletakkan pakaian di dalam ...", options: ["الخِزَانَةِ", "الثَّلاَّجَةِ", "التِّلْفَازِ", "الوَسَادَةِ"], answer: 0 },
+          { ar: "نَضَعُ الطَّعَامَ البَارِدَ فِي ...", ms: "Kita meletakkan makanan sejuk di dalam ...", options: ["الثَّلاَّجَةِ", "الخِزَانَةِ", "التِّلْفَازِ", "الرَّفِّ"], answer: 0 },
+          { ar: "نَشَاهِدُ الأَخْبَارَ فِي ...", ms: "Kita menonton berita di ...", options: ["التِّلْفَازِ", "الخِزَانَةِ", "الهَاتِفِ", "الوَسَادَةِ"], answer: 0 },
+          { ar: "نَضَعُ الرَّأْسَ عَلَى ... عِنْدَ النَّوْمِ", ms: "Kita meletakkan kepala di atas ... semasa tidur.", options: ["الوَسَادَةِ", "الطَّاوِلَةِ", "الخِزَانَةِ", "البَابِ"], answer: 0 },
+          { ar: "مَا مَعْنَى «تَلَفُون / هَاتِفٌ»؟", ms: "Apakah maksud 'هَاتِفٌ'?", options: ["Telefon", "Televisyen", "Kipas", "Lampu"], answer: 0 }
+        ]
+      }
+    };
+
+    // Global States
+    let studentData = { name: "", className: "TAHUN 4 DEDIKASI" };
+    let currentTopicId = null;
+    let currentQuestionIndex = 0;
+    let currentScore = 0;
+    let timerInterval = null;
+    let timeLeft = 60;
+    let jsConfetti = null;
+
+    // ------------------------------------------------------------------
+    // APP INITIALIZATION
+    // ------------------------------------------------------------------
+    window.onload = function() {
+      jsConfetti = new JSConfetti();
+      loadStoredStudentData();
+      registerServiceWorker();
+    };
+
+    function loadStoredStudentData() {
+      const saved = localStorage.getItem("skps_student");
+      if (saved) {
+        studentData = JSON.parse(saved);
+        document.getElementById("input-student-name").value = studentData.name;
+        showTopicSelection();
+      }
+    }
+
+    function saveStudentInfo(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById("input-student-name").value.trim();
+      if (!nameInput) return;
+
+      studentData.name = nameInput;
+      studentData.className = "TAHUN 4 DEDIKASI";
+      localStorage.setItem("skps_student", JSON.stringify(studentData));
+      showTopicSelection();
+    }
+
+    function changeStudentName() {
+      document.getElementById("screen-topics").classList.add("hidden");
+      document.getElementById("screen-welcome").classList.remove("hidden");
+    }
+
+    // ------------------------------------------------------------------
+    // TOPIC SELECTION DISPLAY
+    // ------------------------------------------------------------------
+    function showTopicSelection() {
+      document.getElementById("screen-welcome").classList.add("hidden");
+      document.getElementById("screen-quiz").classList.add("hidden");
+      document.getElementById("screen-result").classList.add("hidden");
+      document.getElementById("screen-topics").classList.remove("hidden");
+
+      document.getElementById("display-student-name").textContent = studentData.name;
+
+      const container = document.getElementById("topics-grid");
+      container.innerHTML = "";
+
+      Object.keys(QUESTION_BANK).forEach(id => {
+        const topic = QUESTION_BANK[id];
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl p-5 custom-card hover:border-blue-500 cursor-pointer transition flex flex-col justify-between";
+        card.onclick = () => startQuiz(id);
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center space-x-3 space-x-reverse md:space-x-3 mb-3">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr ${topic.color} text-white flex items-center justify-center text-xl shadow-md">
+                <i class="fa-solid ${topic.icon}"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">TAJUK ${id}</span>
+                <h3 class="font-bold text-slate-800 text-base md:text-lg leading-tight">${topic.title}</h3>
+              </div>
+            </div>
+            <p class="text-slate-500 text-xs md:text-sm mb-4">${topic.desc}</p>
+          </div>
+          <div class="flex justify-between items-center pt-3 border-t border-slate-100">
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">
+              <i class="fa-solid fa-circle-check mr-1"></i>10 Soalan
+            </span>
+            <span class="text-xs font-bold text-blue-600 flex items-center">
+              Mula Kuiz <i class="fa-solid fa-chevron-right ml-1"></i>
+            </span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // QUIZ ENGINE LOGIC
+    // ------------------------------------------------------------------
+    function startQuiz(topicId) {
+      currentTopicId = topicId;
+      currentQuestionIndex = 0;
+      currentScore = 0;
+
+      document.getElementById("screen-topics").classList.add("hidden");
+      document.getElementById("screen-quiz").classList.remove("hidden");
+
+      const topic = QUESTION_BANK[topicId];
+      document.getElementById("quiz-topic-title").textContent = topic.title;
+
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      clearInterval(timerInterval);
+      timeLeft = 60;
+      updateTimerUI();
+
+      const topic = QUESTION_BANK[currentTopicId];
+      const q = topic.questions[currentQuestionIndex];
+
+      document.getElementById("quiz-progress-text").textContent = `Soalan ${currentQuestionIndex + 1} daripada ${topic.questions.length}`;
+      document.getElementById("question-number-badge").textContent = `SOALAN #${currentQuestionIndex + 1}`;
+      document.getElementById("score-text").textContent = `${currentScore}/100`;
+
+      document.getElementById("question-text-ar").textContent = q.ar;
+      document.getElementById("question-text-ms").textContent = q.ms;
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      // Clone & shuffle options keeping track of original index
+      let optionObjects = q.options.map((optText, idx) => ({ text: optText, originalIndex: idx }));
+      optionObjects.sort(() => Math.random() - 0.5);
+
+      optionObjects.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn w-full bg-slate-50 hover:bg-blue-50 text-slate-800 font-bold p-4 rounded-2xl border-2 border-slate-200 hover:border-blue-400 text-base md:text-lg text-center font-arabic flex items-center justify-between";
+        btn.onclick = () => handleAnswer(opt.originalIndex, q.answer, btn);
+
+        btn.innerHTML = `
+          <span>${opt.text}</span>
+          <i class="fa-regular fa-circle text-slate-300"></i>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+
+      // Start 60s timer countdown
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          handleTimeOut();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const timerBox = document.getElementById("timer-box");
+      const timerText = document.getElementById("timer-text");
+      timerText.textContent = `${timeLeft}s`;
+
+      if (timeLeft <= 10) {
+        timerBox.className = "flex items-center bg-red-100 text-red-700 border border-red-300 px-3 py-1.5 rounded-xl text-sm font-bold timer-danger";
+      } else {
+        timerBox.className = "flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-xl text-sm font-bold";
+      }
+    }
+
+    function handleAnswer(selectedIndex, correctIndex, selectedBtn) {
+      clearInterval(timerInterval);
+
+      const allBtns = document.querySelectorAll(".option-btn");
+      allBtns.forEach(btn => btn.disabled = true);
+
+      if (selectedIndex === correctIndex) {
+        currentScore += 10;
+        selectedBtn.classList.remove("bg-slate-50", "border-slate-200");
+        selectedBtn.classList.add("bg-emerald-100", "border-emerald-500", "text-emerald-900");
+        selectedBtn.querySelector("i").className = "fa-solid fa-circle-check text-emerald-600";
+      } else {
+        selectedBtn.classList.remove("bg-slate-50", "border-slate-200");
+        selectedBtn.classList.add("bg-red-100", "border-red-500", "text-red-900");
+        selectedBtn.querySelector("i").className = "fa-solid fa-circle-xmark text-red-600";
+
+        // Highlight correct option
+        allBtns.forEach(btn => {
+          if (btn.innerText.includes(QUESTION_BANK[currentTopicId].questions[currentQuestionIndex].options[correctIndex])) {
+            btn.classList.remove("bg-slate-50", "border-slate-200");
+            btn.classList.add("bg-emerald-50", "border-emerald-400", "text-emerald-800");
+          }
+        });
+      }
+
+      document.getElementById("score-text").textContent = `${currentScore}/100`;
+
+      setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < QUESTION_BANK[currentTopicId].questions.length) {
+          loadQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 1200);
+    }
+
+    function handleTimeOut() {
+      const allBtns = document.querySelectorAll(".option-btn");
+      allBtns.forEach(btn => btn.disabled = true);
+
+      setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < QUESTION_BANK[currentTopicId].questions.length) {
+          loadQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 1000);
+    }
+
+    function confirmExitQuiz() {
+      if (confirm("Adakah anda pasti mahu keluar dari kuiz ini? Rekod semasa tidak akan disimpan.")) {
+        clearInterval(timerInterval);
+        showTopicSelection();
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // FINISH QUIZ & RESULT CALCULATIONS
+    // ------------------------------------------------------------------
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      document.getElementById("screen-quiz").classList.add("hidden");
+      document.getElementById("screen-result").classList.remove("hidden");
+
+      const topic = QUESTION_BANK[currentTopicId];
+      const percentage = (currentScore / 100) * 100;
+
+      document.getElementById("result-topic-name").textContent = topic.title;
+      document.getElementById("final-score-val").textContent = `${currentScore}/100`;
+      document.getElementById("final-percentage-val").textContent = `Peratusan: ${percentage}%`;
+
+      const badge = document.getElementById("grade-badge");
+      if (percentage >= 80) {
+        badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-white uppercase tracking-wider";
+        badge.textContent = "GRED A (CEMERLANG)";
+        jsConfetti.addConfetti();
+      } else if (percentage >= 60) {
+        badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-blue-500 text-white uppercase tracking-wider";
+        badge.textContent = "GRED B (BAIK)";
+      } else if (percentage >= 40) {
+        badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-amber-500 text-white uppercase tracking-wider";
+        badge.textContent = "GRED C (MEMUASKAN)";
+      } else {
+        badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-red-500 text-white uppercase tracking-wider";
+        badge.textContent = "PERLUKAN LATIHAN";
+      }
+
+      // Send webhook data to Google Sheets if configured
+      sendResultToWebhook(topic.title, currentScore, percentage);
+    }
+
+    function backToTopics() {
+      showTopicSelection();
+    }
+
+    // ------------------------------------------------------------------
+    // DIGITAL CERTIFICATE GENERATOR (HTML CANVAS HD)
+    // ------------------------------------------------------------------
+    function generateAndShowCertificate() {
+      const modal = document.getElementById("modal-cert");
+      modal.classList.remove("hidden");
+
+      const canvas = document.getElementById("cert-canvas");
+      const ctx = canvas.getContext("2d");
+
+      // Background Color / Border Design
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Outer Decorative Border
+      ctx.strokeStyle = "#1e3a8a";
+      ctx.lineWidth = 12;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      // Inner Decorative Border
+      ctx.strokeStyle = "#d97706";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(45, 45, canvas.width - 90, canvas.height - 90);
+
+      // Header School Text
+      ctx.fillStyle = "#1e3a8a";
+      ctx.font = "bold 32px Poppins, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("SEKOLAH KEBANGSAAN PARIT SAPRAN", canvas.width / 2, 110);
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "bold 20px Poppins, sans-serif";
+      ctx.fillText("PONTIAN, JOHOR DARUL TA'ZIM", canvas.width / 2, 145);
+
+      // Certificate Title
+      ctx.fillStyle = "#d97706";
+      ctx.font = "bold 44px Poppins, sans-serif";
+      ctx.fillText("SIJIL PENCAPAIAN DIGITAL", canvas.width / 2, 220);
+
+      // Sub-heading
+      ctx.fillStyle = "#334155";
+      ctx.font = "22px Poppins, sans-serif";
+      ctx.fillText("Dengan ini diperakukan bahawa", canvas.width / 2, 280);
+
+      // Student Name
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 42px Poppins, sans-serif";
+      ctx.fillText(studentData.name.toUpperCase(), canvas.width / 2, 350);
+
+      // Underline for student name
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - 250, 365);
+      ctx.lineTo(canvas.width / 2 + 250, 365);
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Class and Topic Details
+      ctx.fillStyle = "#334155";
+      ctx.font = "22px Poppins, sans-serif";
+      ctx.fillText(`Dari Kelas: ${studentData.className}`, canvas.width / 2, 410);
+
+      const topicTitle = QUESTION_BANK[currentTopicId].title;
+      ctx.fillText(`Telah berjaya menyempurnakan Kuiz Bahasa Arab Tahun 4 bagi tajuk:`, canvas.width / 2, 455);
+
+      ctx.fillStyle = "#1e40af";
+      ctx.font = "bold 26px Poppins, sans-serif";
+      ctx.fillText(`« ${topicTitle} »`, canvas.width / 2, 500);
+
+      // Score Box Badge
+      ctx.fillStyle = "#f8fafc";
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 2;
+      ctx.roundRect(canvas.width / 2 - 180, 530, 360, 90, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#16a34a";
+      ctx.font = "bold 32px Poppins, sans-serif";
+      ctx.fillText(`MARKAH: ${currentScore}/100`, canvas.width / 2, 585);
+
+      // Signatures & School Endorsement
+      ctx.fillStyle = "#475569";
+      ctx.font = "italic 18px Poppins, sans-serif";
+      ctx.fillText("Disediakan Oleh:", 280, 700);
+      
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 20px Poppins, sans-serif";
+      ctx.fillText("CIKGU AZIZI", 280, 735);
+      ctx.font = "16px Poppins, sans-serif";
+      ctx.fillText("Guru Bahasa Arab Tahun 4", 280, 760);
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "italic 18px Poppins, sans-serif";
+      ctx.fillText("Disahkan Oleh:", canvas.width - 280, 700);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 20px Poppins, sans-serif";
+      ctx.fillText("GURU BESAR", canvas.width - 280, 735);
+      ctx.font = "16px Poppins, sans-serif";
+      ctx.fillText("SK Parit Sapran, Pontian", canvas.width - 280, 760);
+    }
+
+    function downloadCanvasCertificate() {
+      const canvas = document.getElementById("cert-canvas");
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = `Sijil_BahasaArab_Tahun4_${studentData.name.replace(/\s+/g, "_")}.png`;
+      link.href = image;
+      link.click();
+    }
+
+    function closeCertModal() {
+      document.getElementById("modal-cert").classList.add("hidden");
+    }
+
+    // ------------------------------------------------------------------
+    // WEBHOOK INTEGRATION (GOOGLE SHEETS)
+    // ------------------------------------------------------------------
+    function openSettingsModal() {
+      const savedWebhook = localStorage.getItem("skps_webhook") || "";
+      document.getElementById("input-webhook-url").value = savedWebhook;
+      document.getElementById("modal-settings").classList.remove("hidden");
+    }
+
+    function closeSettingsModal() {
+      document.getElementById("modal-settings").classList.add("hidden");
+    }
+
+    function saveSettings() {
+      const url = document.getElementById("input-webhook-url").value.trim();
+      localStorage.setItem("skps_webhook", url);
+      closeSettingsModal();
+      alert("Tetapan Webhook Google Sheets telah berjaya disimpan.");
+    }
+
+    function sendResultToWebhook(topicTitle, score, percentage) {
+      const webhookUrl = localStorage.getItem("skps_webhook");
+      if (!webhookUrl) return;
+
+      const payload = {
+        tarikh: new Date().toLocaleString("ms-MY"),
+        nama: studentData.name,
+        kelas: studentData.className,
+        tajuk: topicTitle,
+        markah: `${score}/100`,
+        peratus: `${percentage}%`
+      };
+
+      fetch(webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).catch(err => console.log("Webhook error:", err));
+    }
+
+    // ------------------------------------------------------------------
+    // PWA BLOB SERVICE WORKER & MANIFEST INTEGRATION
+    // ------------------------------------------------------------------
+    function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        const swCode = `
+          const CACHE_NAME = 'skps-arab-v1';
+          self.addEventListener('install', e => {
+            e.waitUntil(
+              caches.open(CACHE_NAME).then(cache => {
+                return cache.addAll(['./']);
+              })
+            );
+          });
+          self.addEventListener('fetch', e => {
+            e.respondWith(
+              caches.match(e.request).then(res => res || fetch(e.request))
+            );
+          });
+        `;
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).catch(err => console.log('SW reg error:', err));
+      }
+
+      // Inject Dynamic Web App Manifest
+      const manifest = {
+        name: "Bahasa Arab Tahun 4 SKPS",
+        short_name: "BA Tahun 4",
+        start_url: "./",
+        display: "standalone",
+        background_color: "#e0f2fe",
+        theme_color: "#2563eb",
+        icons: [{
+          src: "https://placehold.co/192x192/2563eb/ffffff?text=BA4",
+          sizes: "192x192",
+          type: "image/png"
+        }]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      const manifestUrl = URL.createObjectURL(manifestBlob);
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = manifestUrl;
+      document.head.appendChild(link);
+    }
+  </script>
+</body>
+</html>
